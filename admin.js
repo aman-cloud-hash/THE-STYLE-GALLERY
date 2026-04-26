@@ -348,33 +348,70 @@ document.getElementById('product-form').addEventListener('submit', e => {
 
 // ===== ORDERS =====
 function loadOrdersList() {
-    const orders = DB.load('orders', []);
+    let orders = DB.load('orders', []);
     const container = document.getElementById('orders-list-full');
     const summaryStrip = document.getElementById('orders-summary-strip');
 
-    // Summary strip
-    const counts = { confirmed: 0, shipped: 0, delivered: 0, cancelled: 0 };
+    // Summary strip (always shows all orders data)
+    const summaryCounts = { confirmed: 0, shipped: 0, delivered: 0, cancelled: 0 };
     let totalRevenue = 0;
     orders.forEach(o => {
         const s = o.status || 'confirmed';
-        if (counts[s] !== undefined) counts[s]++;
+        if (summaryCounts[s] !== undefined) summaryCounts[s]++;
         if (s !== 'cancelled') totalRevenue += (o.total || 0);
     });
 
     summaryStrip.innerHTML = `
-        <div class="os-item confirmed"><span class="os-count">${counts.confirmed}</span><span class="os-label">Confirmed</span></div>
-        <div class="os-item shipped"><span class="os-count">${counts.shipped}</span><span class="os-label">Shipped</span></div>
-        <div class="os-item delivered"><span class="os-count">${counts.delivered}</span><span class="os-label">Delivered</span></div>
-        <div class="os-item cancelled"><span class="os-count">${counts.cancelled}</span><span class="os-label">Cancelled</span></div>
+        <div class="os-item confirmed"><span class="os-count">${summaryCounts.confirmed}</span><span class="os-label">Confirmed</span></div>
+        <div class="os-item shipped"><span class="os-count">${summaryCounts.shipped}</span><span class="os-label">Shipped</span></div>
+        <div class="os-item delivered"><span class="os-count">${summaryCounts.delivered}</span><span class="os-label">Delivered</span></div>
+        <div class="os-item cancelled"><span class="os-count">${summaryCounts.cancelled}</span><span class="os-label">Cancelled</span></div>
         <div class="os-item revenue"><span class="os-count">₹${totalRevenue.toLocaleString()}</span><span class="os-label">Total Revenue</span></div>
     `;
 
-    if (orders.length === 0) {
-        container.innerHTML = '<p class="empty-msg">No orders yet. Orders placed on the website will appear here.</p>';
+    // Apply Filters
+    const searchQuery = document.getElementById('order-search').value.toLowerCase();
+    const statusFilter = document.querySelector('.filter-btn.active').dataset.filter;
+    const dateFrom = document.getElementById('filter-date-from').value;
+    const dateTo = document.getElementById('filter-date-to').value;
+
+    let filteredOrders = orders.filter(o => {
+        const cust = o.customer || {};
+        const matchesSearch = 
+            o.id.toLowerCase().includes(searchQuery) ||
+            (cust.name || o.customerName || '').toLowerCase().includes(searchQuery) ||
+            (cust.phone || o.phone || '').toLowerCase().includes(searchQuery);
+        
+        const matchesStatus = statusFilter === 'all' || (o.status || 'confirmed') === statusFilter;
+        
+        let matchesDate = true;
+        if (o.timestamp) {
+            const orderDate = new Date(o.timestamp).toISOString().split('T')[0];
+            if (dateFrom && orderDate < dateFrom) matchesDate = false;
+            if (dateTo && orderDate > dateTo) matchesDate = false;
+        } else if (o.date) {
+            // Fallback for orders without timestamp
+            try {
+                // Assuming date is in DD MMM YYYY or similar local format, this is tricky
+                // For safety, if no timestamp, we only filter if we can parse it
+                const d = new Date(o.date);
+                if (!isNaN(d.getTime())) {
+                    const orderDate = d.toISOString().split('T')[0];
+                    if (dateFrom && orderDate < dateFrom) matchesDate = false;
+                    if (dateTo && orderDate > dateTo) matchesDate = false;
+                }
+            } catch(e) {}
+        }
+
+        return matchesSearch && matchesStatus && matchesDate;
+    });
+
+    if (filteredOrders.length === 0) {
+        container.innerHTML = '<p class="empty-msg">No orders match your filters.</p>';
         return;
     }
 
-    container.innerHTML = orders.slice().reverse().map(o => {
+    container.innerHTML = filteredOrders.slice().reverse().map(o => {
         const cust = o.customer || {};
         const itemsPreview = (o.items || []).slice(0, 3).map(i =>
             `<img src="${i.image}" alt="${i.name}" onerror="this.style.display='none'">`
@@ -399,19 +436,36 @@ function loadOrdersList() {
             </select>
         </div>`;
     }).join('');
+}
 
-    // Filter buttons
+// Order Filter Listeners
+function initOrderFilters() {
+    const search = document.getElementById('order-search');
+    const dateFrom = document.getElementById('filter-date-from');
+    const dateTo = document.getElementById('filter-date-to');
+    const clearDates = document.getElementById('clear-date-filters');
+
+    const triggerUpdate = () => loadOrdersList();
+
+    search.addEventListener('input', triggerUpdate);
+    dateFrom.addEventListener('change', triggerUpdate);
+    dateTo.addEventListener('change', triggerUpdate);
+    
+    clearDates.addEventListener('click', () => {
+        dateFrom.value = '';
+        dateTo.value = '';
+        triggerUpdate();
+    });
+
     document.querySelectorAll('.filter-btn').forEach(btn => {
         btn.addEventListener('click', () => {
             document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
-            const filter = btn.dataset.filter;
-            document.querySelectorAll('#orders-list-full .order-card').forEach(card => {
-                card.style.display = (filter === 'all' || card.dataset.status === filter) ? 'grid' : 'none';
-            });
+            triggerUpdate();
         });
     });
 }
+
 
 function updateOrderStatus(orderId, status) {
     const orders = DB.load('orders', []);
@@ -683,3 +737,4 @@ document.getElementById('reset-data').addEventListener('click', () => {
 initData();
 initLogin();
 initNav();
+initOrderFilters();

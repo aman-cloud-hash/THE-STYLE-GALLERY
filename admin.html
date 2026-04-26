@@ -183,14 +183,36 @@
             <section class="page" id="page-orders">
                 <div class="page-header">
                     <h3>Orders Management</h3>
-                    <div class="order-filters">
-                        <button class="filter-btn active" data-filter="all">All</button>
-                        <button class="filter-btn" data-filter="confirmed">Confirmed</button>
-                        <button class="filter-btn" data-filter="shipped">Shipped</button>
-                        <button class="filter-btn" data-filter="delivered">Delivered</button>
-                        <button class="filter-btn" data-filter="cancelled">Cancelled</button>
+                    <div class="header-actions">
+                        <div class="search-box">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                            <input type="text" id="order-search" placeholder="Search Order ID, Name, Phone...">
+                        </div>
                     </div>
                 </div>
+
+                <div class="filter-toolbar">
+                    <div class="filter-group">
+                        <label>Status</label>
+                        <div class="order-filters">
+                            <button class="filter-btn active" data-filter="all">All</button>
+                            <button class="filter-btn" data-filter="confirmed">Confirmed</button>
+                            <button class="filter-btn" data-filter="shipped">Shipped</button>
+                            <button class="filter-btn" data-filter="delivered">Delivered</button>
+                            <button class="filter-btn" data-filter="cancelled">Cancelled</button>
+                        </div>
+                    </div>
+                    <div class="filter-group">
+                        <label>Date Range</label>
+                        <div class="date-filters">
+                            <input type="date" id="filter-date-from" title="From Date">
+                            <span>to</span>
+                            <input type="date" id="filter-date-to" title="To Date">
+                            <button id="clear-date-filters" class="action-btn" title="Clear Dates"><i class="fa-solid fa-rotate-left"></i></button>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="orders-summary-strip" id="orders-summary-strip"></div>
                 <div class="orders-list" id="orders-list-full">
                     <p class="empty-msg">No orders yet</p>
