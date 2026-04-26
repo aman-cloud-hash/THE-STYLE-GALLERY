@@ -1003,18 +1003,74 @@ if (origPlaceOrder) {
     origPlaceOrder.addEventListener('click', () => {
         setTimeout(() => {
             const cart = JSON.parse(localStorage.getItem('cart')) || [];
-            if (cart.length === 0) return; // Already cleared
-            const adminOrders = JSON.parse(localStorage.getItem('tsg_orders') || '[]');
+            if (cart.length === 0) return;
+
+            // Capture shipping details
+            const customerName = document.getElementById('ship-name')?.value || 'N/A';
+            const email = document.getElementById('ship-email')?.value || '';
+            const phone = document.getElementById('ship-phone')?.value || '';
+            const address = document.getElementById('ship-address')?.value || '';
+            const city = document.getElementById('ship-city')?.value || '';
+            const state = document.getElementById('ship-state')?.value || '';
+            const pincode = document.getElementById('ship-pincode')?.value || '';
+
+            const totalQty = cart.reduce((s, item) => s + (item.quantity || 1), 0);
+            const subtotal = cart.reduce((s, item) => s + (item.price * (item.quantity || 1)), 0);
+
+            // Detect which combo offer was applied
+            const offersData = localStorage.getItem('tsg_offers');
+            let appliedOffer = 'None';
+            let discount = 0;
+            let finalTotal = subtotal;
+            if (offersData) {
+                const offers = JSON.parse(offersData);
+                if (offers.combos && offers.combos.length > 0) {
+                    // Sort combos by qty descending to apply best match first
+                    const sorted = [...offers.combos].sort((a, b) => b.qty - a.qty);
+                    for (const combo of sorted) {
+                        if (totalQty >= combo.qty) {
+                            appliedOffer = `Buy ${combo.qty} at ₹${combo.price}`;
+                            finalTotal = combo.price;
+                            discount = subtotal - combo.price;
+                            break;
+                        }
+                    }
+                }
+            }
+
+            const now = new Date();
             const orderId = 'TSG-' + Math.floor(1000 + Math.random() * 9000);
-            const total = cart.reduce((s, item) => s + (item.price * item.quantity), 0);
+
+            const adminOrders = JSON.parse(localStorage.getItem('tsg_orders') || '[]');
             adminOrders.push({
                 id: orderId,
-                items: cart,
-                total: total,
+                items: cart.map(item => ({
+                    name: item.name,
+                    price: item.price,
+                    quantity: item.quantity || 1,
+                    size: item.size || 'N/A',
+                    image: item.image
+                })),
+                subtotal: subtotal,
+                discount: discount,
+                total: finalTotal,
+                appliedOffer: appliedOffer,
+                paymentMethod: 'Cash on Delivery',
                 status: 'confirmed',
-                date: new Date().toLocaleDateString(),
-                customerName: 'Customer',
-                phone: ''
+                totalQty: totalQty,
+                date: now.toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }),
+                time: now.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', hour12: true }),
+                timestamp: now.toISOString(),
+                customer: {
+                    name: customerName,
+                    email: email,
+                    phone: phone,
+                    address: address,
+                    city: city,
+                    state: state,
+                    pincode: pincode,
+                    fullAddress: `${address}, ${city}, ${state} - ${pincode}`
+                }
             });
             localStorage.setItem('tsg_orders', JSON.stringify(adminOrders));
         }, 100);

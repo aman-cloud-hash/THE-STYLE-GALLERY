@@ -350,26 +350,55 @@ document.getElementById('product-form').addEventListener('submit', e => {
 function loadOrdersList() {
     const orders = DB.load('orders', []);
     const container = document.getElementById('orders-list-full');
+    const summaryStrip = document.getElementById('orders-summary-strip');
+
+    // Summary strip
+    const counts = { confirmed: 0, shipped: 0, delivered: 0, cancelled: 0 };
+    let totalRevenue = 0;
+    orders.forEach(o => {
+        const s = o.status || 'confirmed';
+        if (counts[s] !== undefined) counts[s]++;
+        if (s !== 'cancelled') totalRevenue += (o.total || 0);
+    });
+
+    summaryStrip.innerHTML = `
+        <div class="os-item confirmed"><span class="os-count">${counts.confirmed}</span><span class="os-label">Confirmed</span></div>
+        <div class="os-item shipped"><span class="os-count">${counts.shipped}</span><span class="os-label">Shipped</span></div>
+        <div class="os-item delivered"><span class="os-count">${counts.delivered}</span><span class="os-label">Delivered</span></div>
+        <div class="os-item cancelled"><span class="os-count">${counts.cancelled}</span><span class="os-label">Cancelled</span></div>
+        <div class="os-item revenue"><span class="os-count">₹${totalRevenue.toLocaleString()}</span><span class="os-label">Total Revenue</span></div>
+    `;
+
     if (orders.length === 0) {
         container.innerHTML = '<p class="empty-msg">No orders yet. Orders placed on the website will appear here.</p>';
         return;
     }
-    container.innerHTML = orders.slice().reverse().map(o => `
-        <div class="order-card" data-status="${o.status || 'confirmed'}">
+
+    container.innerHTML = orders.slice().reverse().map(o => {
+        const cust = o.customer || {};
+        const itemsPreview = (o.items || []).slice(0, 3).map(i =>
+            `<img src="${i.image}" alt="${i.name}" onerror="this.style.display='none'">`
+        ).join('');
+        const moreCount = (o.items || []).length > 3 ? `<div class="more-items">+${(o.items || []).length - 3}</div>` : '';
+
+        return `
+        <div class="order-card" data-status="${o.status || 'confirmed'}" onclick="viewOrderDetail('${o.id}')">
             <div>
                 <span class="order-id">${o.id}</span>
-                <div class="order-detail">${o.customerName || 'Customer'} • ${o.items ? o.items.map(i => i.name).join(', ') : 'N/A'}</div>
-                <div class="order-detail">${o.date || 'N/A'} • ${o.phone || ''}</div>
+                <span class="order-status-badge s-${o.status || 'confirmed'}">${o.status || 'confirmed'}</span>
+                <div class="order-detail"><i class="fa-solid fa-user" style="font-size:0.7rem;"></i> ${cust.name || o.customerName || 'N/A'} &nbsp;•&nbsp; <i class="fa-solid fa-phone" style="font-size:0.7rem;"></i> ${cust.phone || o.phone || 'N/A'}</div>
+                <div class="order-detail"><i class="fa-solid fa-calendar" style="font-size:0.7rem;"></i> ${o.date || 'N/A'} ${o.time ? '&nbsp;•&nbsp; <i class="fa-solid fa-clock" style="font-size:0.7rem;"></i> ' + o.time : ''} &nbsp;•&nbsp; ${o.totalQty || (o.items ? o.items.length : 0)} items</div>
+                <div class="order-items-preview">${itemsPreview}${moreCount}</div>
             </div>
             <span class="order-total">₹${o.total || 0}</span>
-            <select class="order-status-select" onchange="updateOrderStatus('${o.id}', this.value)">
+            <select class="order-status-select" onclick="event.stopPropagation()" onchange="updateOrderStatus('${o.id}', this.value)">
                 <option value="confirmed" ${o.status === 'confirmed' ? 'selected' : ''}>Confirmed</option>
                 <option value="shipped" ${o.status === 'shipped' ? 'selected' : ''}>Shipped</option>
                 <option value="delivered" ${o.status === 'delivered' ? 'selected' : ''}>Delivered</option>
                 <option value="cancelled" ${o.status === 'cancelled' ? 'selected' : ''}>Cancelled</option>
             </select>
-        </div>
-    `).join('');
+        </div>`;
+    }).join('');
 
     // Filter buttons
     document.querySelectorAll('.filter-btn').forEach(btn => {
@@ -377,7 +406,7 @@ function loadOrdersList() {
             document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
             const filter = btn.dataset.filter;
-            document.querySelectorAll('.order-card').forEach(card => {
+            document.querySelectorAll('#orders-list-full .order-card').forEach(card => {
                 card.style.display = (filter === 'all' || card.dataset.status === filter) ? 'grid' : 'none';
             });
         });
@@ -387,8 +416,157 @@ function loadOrdersList() {
 function updateOrderStatus(orderId, status) {
     const orders = DB.load('orders', []);
     const o = orders.find(x => x.id === orderId);
-    if (o) { o.status = status; DB.save('orders', orders); toast('Order status updated!'); }
+    if (o) {
+        o.status = status;
+        // Add status change timestamp
+        if (!o.statusHistory) o.statusHistory = [];
+        o.statusHistory.push({ status, time: new Date().toLocaleString('en-IN') });
+        DB.save('orders', orders);
+        toast('Order status updated!');
+        loadOrdersList();
+        loadDashboard();
+    }
 }
+
+// View order detail modal
+window.viewOrderDetail = function(orderId) {
+    const orders = DB.load('orders', []);
+    const o = orders.find(x => x.id === orderId);
+    if (!o) return;
+
+    const cust = o.customer || {};
+    const modal = document.getElementById('order-detail-modal');
+    const content = document.getElementById('od-content');
+    document.getElementById('od-title').textContent = 'Order ' + o.id;
+
+    // Build timeline
+    const statuses = ['confirmed', 'shipped', 'delivered'];
+    const statusLabels = { confirmed: 'Order Confirmed', shipped: 'Shipped', delivered: 'Delivered', cancelled: 'Cancelled' };
+    const currentIdx = statuses.indexOf(o.status);
+    const history = o.statusHistory || [{ status: 'confirmed', time: `${o.date} ${o.time || ''}` }];
+
+    let timelineHTML = '';
+    if (o.status === 'cancelled') {
+        timelineHTML = `
+            <div class="od-timeline-item"><div class="od-timeline-dot active"></div><div class="od-timeline-text"><div class="od-tl-title">Order Confirmed</div><div class="od-tl-time">${o.date} ${o.time || ''}</div></div></div>
+            <div class="od-timeline-item"><div class="od-timeline-dot active" style="background:var(--danger);border-color:var(--danger);"></div><div class="od-timeline-text"><div class="od-tl-title" style="color:var(--danger);">Order Cancelled</div><div class="od-tl-time">${history.length > 1 ? history[history.length-1].time : ''}</div></div></div>
+        `;
+    } else {
+        timelineHTML = statuses.map((s, i) => {
+            const isActive = i <= currentIdx;
+            const histEntry = history.find(h => h.status === s);
+            return `<div class="od-timeline-item"><div class="od-timeline-dot ${isActive ? 'active' : ''}"></div><div class="od-timeline-text"><div class="od-tl-title">${statusLabels[s]}</div><div class="od-tl-time">${histEntry ? histEntry.time : (isActive ? o.date : 'Pending')}</div></div></div>`;
+        }).join('');
+    }
+
+    // Items HTML
+    const itemsHTML = (o.items || []).map(item => `
+        <div class="od-item-row">
+            <img src="${item.image}" alt="${item.name}" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect fill=%22%231a1a25%22 width=%22100%22 height=%22100%22/></svg>'">
+            <div class="od-item-info">
+                <div class="od-item-name">${item.name}</div>
+                <div class="od-item-meta">Size: ${item.size || 'N/A'} &nbsp;•&nbsp; Qty: ${item.quantity || 1}</div>
+            </div>
+            <div class="od-item-price">₹${(item.price * (item.quantity || 1)).toLocaleString()}</div>
+        </div>
+    `).join('');
+
+    content.innerHTML = `
+        <div class="od-section">
+            <div class="od-section-title"><i class="fa-solid fa-user"></i> Customer Details</div>
+            <div class="od-grid">
+                <div class="od-field"><div class="od-label">Name</div><div class="od-value">${cust.name || o.customerName || 'N/A'}</div></div>
+                <div class="od-field"><div class="od-label">Phone</div><div class="od-value">${cust.phone || o.phone || 'N/A'}</div></div>
+                <div class="od-field"><div class="od-label">Email</div><div class="od-value">${cust.email || 'N/A'}</div></div>
+                <div class="od-field"><div class="od-label">City</div><div class="od-value">${cust.city || 'N/A'}</div></div>
+                <div class="od-field full"><div class="od-label">Full Address</div><div class="od-value">${cust.fullAddress || cust.address || 'N/A'}</div></div>
+                <div class="od-field"><div class="od-label">State</div><div class="od-value">${cust.state || 'N/A'}</div></div>
+                <div class="od-field"><div class="od-label">PIN Code</div><div class="od-value">${cust.pincode || 'N/A'}</div></div>
+            </div>
+        </div>
+
+        <div class="od-section">
+            <div class="od-section-title"><i class="fa-solid fa-box-open"></i> Order Items (${o.totalQty || (o.items ? o.items.reduce((s,i) => s + (i.quantity||1), 0) : 0)} items)</div>
+            ${itemsHTML}
+        </div>
+
+        <div class="od-section">
+            <div class="od-section-title"><i class="fa-solid fa-receipt"></i> Payment Summary</div>
+            <div class="od-total-row"><span>Subtotal</span><span>₹${(o.subtotal || o.total || 0).toLocaleString()}</span></div>
+            ${o.discount && o.discount > 0 ? `<div class="od-total-row discount"><span>Discount</span><span>- ₹${o.discount.toLocaleString()}</span></div>` : ''}
+            <div class="od-total-row"><span>Shipping</span><span style="color:var(--success);">FREE</span></div>
+            <div class="od-total-row grand-total"><span>Total Paid</span><span>₹${(o.total || 0).toLocaleString()}</span></div>
+            ${o.appliedOffer && o.appliedOffer !== 'None' ? `<div class="od-offer-badge"><i class="fa-solid fa-tag"></i> Offer Applied: ${o.appliedOffer}</div>` : ''}
+            <div style="margin-top:8px;font-size:0.8rem;color:var(--text-2);"><i class="fa-solid fa-truck-fast"></i> Payment: ${o.paymentMethod || 'Cash on Delivery'}</div>
+        </div>
+
+        <div class="od-section">
+            <div class="od-section-title"><i class="fa-solid fa-clock-rotate-left"></i> Order Timeline</div>
+            <div class="od-grid" style="margin-bottom:12px;">
+                <div class="od-field"><div class="od-label">Order Date</div><div class="od-value">${o.date || 'N/A'}</div></div>
+                <div class="od-field"><div class="od-label">Order Time</div><div class="od-value">${o.time || 'N/A'}</div></div>
+            </div>
+            <div class="od-timeline">${timelineHTML}</div>
+        </div>
+
+        <div style="display:flex;gap:8px;margin-top:15px;">
+            <button class="od-print-btn" onclick="printOrder('${o.id}')"><i class="fa-solid fa-print"></i> Print Invoice</button>
+            <button class="od-print-btn" onclick="copyOrderToClipboard('${o.id}')"><i class="fa-solid fa-copy"></i> Copy Details</button>
+        </div>
+    `;
+
+    modal.style.display = 'flex';
+};
+
+// Close order detail modal
+document.getElementById('close-order-modal').addEventListener('click', () => {
+    document.getElementById('order-detail-modal').style.display = 'none';
+});
+
+// Print invoice
+window.printOrder = function(orderId) {
+    const orders = DB.load('orders', []);
+    const o = orders.find(x => x.id === orderId);
+    if (!o) return;
+    const cust = o.customer || {};
+    const itemsText = (o.items || []).map(i => `${i.name} (Size: ${i.size || 'N/A'}) x${i.quantity || 1} — ₹${i.price * (i.quantity || 1)}`).join('\n');
+
+    const printWin = window.open('', '_blank');
+    printWin.document.write(`<html><head><title>Invoice ${o.id}</title><style>body{font-family:Arial,sans-serif;padding:40px;color:#222;}h1{font-size:22px;}h2{font-size:16px;margin-top:25px;border-bottom:1px solid #ddd;padding-bottom:5px;}.row{display:flex;justify-content:space-between;padding:5px 0;}.total{font-weight:bold;font-size:18px;border-top:2px solid #222;margin-top:10px;padding-top:10px;}.offer{color:#d63031;font-weight:bold;}.items{margin:10px 0;}.item{padding:8px 0;border-bottom:1px solid #eee;}</style></head><body>`);
+    printWin.document.write(`<h1>THE STYLE GALLERY — Invoice</h1>`);
+    printWin.document.write(`<p>Order: <strong>${o.id}</strong> | Date: ${o.date} ${o.time || ''} | Status: ${o.status}</p>`);
+    printWin.document.write(`<h2>Customer</h2><p>${cust.name || 'N/A'}<br>${cust.phone || ''}<br>${cust.email || ''}<br>${cust.fullAddress || ''}</p>`);
+    printWin.document.write(`<h2>Items</h2><div class="items">`);
+    (o.items || []).forEach(i => {
+        printWin.document.write(`<div class="item"><div class="row"><span>${i.name} (Size: ${i.size || 'N/A'}) × ${i.quantity || 1}</span><span>₹${(i.price * (i.quantity || 1)).toLocaleString()}</span></div></div>`);
+    });
+    printWin.document.write(`</div>`);
+    printWin.document.write(`<div class="row"><span>Subtotal</span><span>₹${(o.subtotal || o.total || 0).toLocaleString()}</span></div>`);
+    if (o.discount > 0) printWin.document.write(`<div class="row offer"><span>Discount (${o.appliedOffer})</span><span>- ₹${o.discount.toLocaleString()}</span></div>`);
+    printWin.document.write(`<div class="row"><span>Shipping</span><span>FREE</span></div>`);
+    printWin.document.write(`<div class="row total"><span>Total</span><span>₹${(o.total || 0).toLocaleString()}</span></div>`);
+    printWin.document.write(`<p style="margin-top:30px;font-size:12px;color:#999;">Payment: ${o.paymentMethod || 'COD'} | Thank you for shopping with THE STYLE GALLERY!</p>`);
+    printWin.document.write(`</body></html>`);
+    printWin.document.close();
+    printWin.print();
+};
+
+// Copy order details to clipboard
+window.copyOrderToClipboard = function(orderId) {
+    const orders = DB.load('orders', []);
+    const o = orders.find(x => x.id === orderId);
+    if (!o) return;
+    const cust = o.customer || {};
+    let text = `Order: ${o.id}\nDate: ${o.date} ${o.time || ''}\nStatus: ${o.status}\n\n`;
+    text += `Customer: ${cust.name || 'N/A'}\nPhone: ${cust.phone || 'N/A'}\nEmail: ${cust.email || 'N/A'}\nAddress: ${cust.fullAddress || 'N/A'}\n\n`;
+    text += `Items:\n`;
+    (o.items || []).forEach(i => { text += `- ${i.name} (Size: ${i.size || 'N/A'}) x${i.quantity || 1} = ₹${i.price * (i.quantity || 1)}\n`; });
+    text += `\nSubtotal: ₹${o.subtotal || o.total || 0}`;
+    if (o.discount > 0) text += `\nDiscount: -₹${o.discount} (${o.appliedOffer})`;
+    text += `\nTotal: ₹${o.total || 0}\nPayment: ${o.paymentMethod || 'COD'}`;
+    navigator.clipboard.writeText(text).then(() => toast('Order details copied!')).catch(() => toast('Copy failed', true));
+};
+
 
 // ===== ANALYTICS =====
 function loadAnalytics() {

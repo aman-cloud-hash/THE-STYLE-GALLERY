@@ -188,8 +188,10 @@
                         <button class="filter-btn" data-filter="confirmed">Confirmed</button>
                         <button class="filter-btn" data-filter="shipped">Shipped</button>
                         <button class="filter-btn" data-filter="delivered">Delivered</button>
+                        <button class="filter-btn" data-filter="cancelled">Cancelled</button>
                     </div>
                 </div>
+                <div class="orders-summary-strip" id="orders-summary-strip"></div>
                 <div class="orders-list" id="orders-list-full">
                     <p class="empty-msg">No orders yet</p>
                 </div>
@@ -258,6 +260,17 @@
                 </div>
             </section>
         </main>
+    </div>
+
+    <!-- Order Detail Modal -->
+    <div class="modal-overlay" id="order-detail-modal" style="display:none;">
+        <div class="modal-box" style="width:650px;">
+            <div class="modal-header">
+                <h3 id="od-title">Order Details</h3>
+                <button class="modal-close" id="close-order-modal"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div id="od-content"></div>
+        </div>
     </div>
 
     <!-- Product Modal -->
