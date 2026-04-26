@@ -642,6 +642,65 @@ body {
 .perf-bar-bg { height: 8px; background: var(--surface-2); border-radius: 10px; overflow: hidden; }
 .perf-bar-fill { height: 100%; border-radius: 10px; background: linear-gradient(90deg, var(--accent), var(--accent-2)); transition: width 1s ease; }
 
+/* Enhanced Orders Layout */
+.bulk-actions-bar {
+    background: var(--accent);
+    color: #fff;
+    padding: 12px 25px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    animation: slideUp 0.3s ease;
+    box-shadow: 0 10px 30px rgba(108,92,231,0.3);
+}
+
+@keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+.bulk-info { display: flex; align-items: center; gap: 15px; font-weight: 600; }
+.bulk-btns { display: flex; gap: 10px; }
+.bulk-btns .action-btn { background: rgba(255,255,255,0.2); border-color: transparent; color: #fff; padding: 8px 15px; }
+.bulk-btns .action-btn:hover { background: #fff; color: var(--accent); }
+.bulk-btns .action-btn.danger:hover { background: var(--danger); color: #fff; }
+
+.orders-list-header {
+    display: grid;
+    grid-template-columns: 50px 120px 1fr 150px 100px 130px 100px;
+    padding: 15px 20px;
+    background: var(--surface-2);
+    border-radius: 12px 12px 0 0;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--text-2);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border: 1px solid var(--border);
+    border-bottom: none;
+}
+
+.order-card {
+    display: grid;
+    grid-template-columns: 50px 120px 1fr 150px 100px 130px 100px;
+    padding: 15px 20px;
+    margin-bottom: 0;
+    border-radius: 0;
+    border-top: none;
+    align-items: center;
+}
+
+.order-card:last-child { border-radius: 0 0 12px 12px; }
+
+.order-card input[type="checkbox"], .orders-list-header input[type="checkbox"], .bulk-info input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+    accent-color: var(--accent);
+}
+
+.col-total { font-weight: 700; color: var(--text); }
+.col-id { font-family: monospace; font-weight: 600; }
+
 /* Modal */
 .modal-overlay {
     position: fixed;

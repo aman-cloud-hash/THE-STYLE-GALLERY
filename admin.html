@@ -213,7 +213,28 @@
                     </div>
                 </div>
 
+                <div class="bulk-actions-bar" id="bulk-actions-bar" style="display: none;">
+                    <div class="bulk-info">
+                        <input type="checkbox" id="select-all-orders">
+                        <span id="selected-count">0 Selected</span>
+                    </div>
+                    <div class="bulk-btns">
+                        <button onclick="bulkUpdateStatus('shipped')" class="action-btn"><i class="fa-solid fa-truck"></i> Mark Shipped</button>
+                        <button onclick="bulkUpdateStatus('delivered')" class="action-btn"><i class="fa-solid fa-check-double"></i> Mark Delivered</button>
+                        <button onclick="bulkDeleteOrders()" class="action-btn danger"><i class="fa-solid fa-trash"></i> Delete</button>
+                    </div>
+                </div>
+
                 <div class="orders-summary-strip" id="orders-summary-strip"></div>
+                <div class="orders-list-header">
+                    <div class="col-select"><input type="checkbox" id="select-all-header"></div>
+                    <div class="col-id">Order ID</div>
+                    <div class="col-cust">Customer</div>
+                    <div class="col-date">Date</div>
+                    <div class="col-total">Total</div>
+                    <div class="col-status">Status</div>
+                    <div class="col-actions">Actions</div>
+                </div>
                 <div class="orders-list" id="orders-list-full">
                     <p class="empty-msg">No orders yet</p>
                 </div>

@@ -420,23 +420,104 @@ function loadOrdersList() {
 
         return `
         <div class="order-card" data-status="${o.status || 'confirmed'}" onclick="viewOrderDetail('${o.id}')">
-            <div>
-                <span class="order-id">${o.id}</span>
-                <span class="order-status-badge s-${o.status || 'confirmed'}">${o.status || 'confirmed'}</span>
-                <div class="order-detail"><i class="fa-solid fa-user" style="font-size:0.7rem;"></i> ${cust.name || o.customerName || 'N/A'} &nbsp;•&nbsp; <i class="fa-solid fa-phone" style="font-size:0.7rem;"></i> ${cust.phone || o.phone || 'N/A'}</div>
-                <div class="order-detail"><i class="fa-solid fa-calendar" style="font-size:0.7rem;"></i> ${o.date || 'N/A'} ${o.time ? '&nbsp;•&nbsp; <i class="fa-solid fa-clock" style="font-size:0.7rem;"></i> ' + o.time : ''} &nbsp;•&nbsp; ${o.totalQty || (o.items ? o.items.length : 0)} items</div>
-                <div class="order-items-preview">${itemsPreview}${moreCount}</div>
+            <div class="col-select" onclick="event.stopPropagation()"><input type="checkbox" class="order-checkbox" data-id="${o.id}"></div>
+            <div class="col-id">${o.id}</div>
+            <div class="col-cust">
+                <div style="font-weight:600;">${cust.name || o.customerName || 'N/A'}</div>
+                <div style="font-size:0.75rem;color:var(--text-2);">${cust.phone || o.phone || 'N/A'}</div>
             </div>
-            <span class="order-total">₹${o.total || 0}</span>
-            <select class="order-status-select" onclick="event.stopPropagation()" onchange="updateOrderStatus('${o.id}', this.value)">
-                <option value="confirmed" ${o.status === 'confirmed' ? 'selected' : ''}>Confirmed</option>
-                <option value="shipped" ${o.status === 'shipped' ? 'selected' : ''}>Shipped</option>
-                <option value="delivered" ${o.status === 'delivered' ? 'selected' : ''}>Delivered</option>
-                <option value="cancelled" ${o.status === 'cancelled' ? 'selected' : ''}>Cancelled</option>
-            </select>
+            <div class="col-date">
+                <div>${o.date || 'N/A'}</div>
+                <div style="font-size:0.75rem;color:var(--text-2);">${o.time || ''}</div>
+            </div>
+            <div class="col-total">₹${o.total || 0}</div>
+            <div class="col-status">
+                <span class="order-status-badge s-${o.status || 'confirmed'}">${o.status || 'confirmed'}</span>
+            </div>
+            <div class="col-actions" onclick="event.stopPropagation()">
+                <select class="order-status-select" onchange="updateOrderStatus('${o.id}', this.value)">
+                    <option value="confirmed" ${o.status === 'confirmed' ? 'selected' : ''}>Confirmed</option>
+                    <option value="shipped" ${o.status === 'shipped' ? 'selected' : ''}>Shipped</option>
+                    <option value="delivered" ${o.status === 'delivered' ? 'selected' : ''}>Delivered</option>
+                    <option value="cancelled" ${o.status === 'cancelled' ? 'selected' : ''}>Cancelled</option>
+                </select>
+            </div>
         </div>`;
     }).join('');
+
+    updateSelectionListeners();
 }
+
+function updateSelectionListeners() {
+    const checkboxes = document.querySelectorAll('.order-checkbox');
+    const selectAllHeader = document.getElementById('select-all-header');
+    const selectAllBar = document.getElementById('select-all-orders');
+    const bulkBar = document.getElementById('bulk-actions-bar');
+    const countLabel = document.getElementById('selected-count');
+
+    const updateBar = () => {
+        const checked = document.querySelectorAll('.order-checkbox:checked');
+        if (checked.length > 0) {
+            bulkBar.style.display = 'flex';
+            countLabel.textContent = `${checked.length} Selected`;
+        } else {
+            bulkBar.style.display = 'none';
+        }
+        selectAllHeader.checked = checked.length === checkboxes.length && checkboxes.length > 0;
+        selectAllBar.checked = selectAllHeader.checked;
+    };
+
+    checkboxes.forEach(cb => cb.addEventListener('change', updateBar));
+
+    const toggleAll = (state) => {
+        checkboxes.forEach(cb => cb.checked = state);
+        updateBar();
+    };
+
+    selectAllHeader.onclick = (e) => toggleAll(e.target.checked);
+    selectAllBar.onclick = (e) => toggleAll(e.target.checked);
+}
+
+window.bulkUpdateStatus = function(status) {
+    const checked = document.querySelectorAll('.order-checkbox:checked');
+    if (checked.length === 0) return;
+    
+    if (!confirm(`Update ${checked.length} orders to ${status}?`)) return;
+
+    const orders = DB.load('orders', []);
+    const now = new Date().toLocaleString('en-IN');
+    
+    checked.forEach(cb => {
+        const id = cb.dataset.id;
+        const o = orders.find(x => x.id === id);
+        if (o) {
+            o.status = status;
+            if (!o.statusHistory) o.statusHistory = [];
+            o.statusHistory.push({ status, time: now });
+        }
+    });
+
+    DB.save('orders', orders);
+    toast(`Updated ${checked.length} orders!`);
+    loadOrdersList();
+    loadDashboard();
+};
+
+window.bulkDeleteOrders = function() {
+    const checked = document.querySelectorAll('.order-checkbox:checked');
+    if (checked.length === 0) return;
+    
+    if (!confirm(`Permanently delete ${checked.length} orders?`)) return;
+
+    let orders = DB.load('orders', []);
+    const idsToDelete = Array.from(checked).map(cb => cb.dataset.id);
+    orders = orders.filter(o => !idsToDelete.includes(o.id));
+
+    DB.save('orders', orders);
+    toast(`Deleted ${checked.length} orders!`);
+    loadOrdersList();
+    loadDashboard();
+};
 
 // Order Filter Listeners
 function initOrderFilters() {
@@ -738,3 +819,17 @@ initData();
 initLogin();
 initNav();
 initOrderFilters();
+
+// ===== REALTIME SYNC =====
+try {
+    const syncChannel = new BroadcastChannel('tsg_sync');
+    syncChannel.onmessage = (e) => {
+        const { key } = e.data;
+        if (key === 'orders') {
+            loadOrdersList();
+            loadDashboard();
+            loadAnalytics();
+            toast('New order received!', false);
+        }
+    };
+} catch(e) {}
