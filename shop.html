@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shop | THE STYLE GALLERY</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .shop-page-header {
+            padding: 150px 0 60px;
+            text-align: center;
+            background: #0a0a0a;
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .shop-page-header h1 {
+            font-size: 3rem;
+            margin-bottom: 10px;
+            letter-spacing: -1px;
+        }
+
+        .shop-page-header p {
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            font-size: 0.9rem;
+        }
+
+        .filter-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--glass-border);
+            border-radius: 8px;
+        }
+
+        .filter-tag {
+            background: #ff4d00;
+            color: #fff;
+            padding: 5px 15px;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 800;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="promo-bar">
+        <div class="promo-content">
+            <span><i class="fa-solid fa-truck-fast"></i> CASH ON DELIVERY AVAILABLE NATIONWIDE!</span>
+            <span><i class="fa-solid fa-bolt"></i> NEW ARRIVALS: PREMIUM BAGGY JEANS COLLECTION</span>
+        </div>
+    </div>
+
+    <nav id="navbar" class="scrolled">
+        <div class="nav-left">
+            <div class="logo">
+                <a href="index.html"><img src="assets/images/logo.png" alt="THE STYLE GALLERY"></a>
+            </div>
+        </div>
+
+        <div class="nav-center">
+            <ul class="nav-links">
+                <li><a href="index.html#home">HOME</a></li>
+                <li><a href="index.html#shop">BAGGY JEANS</a></li>
+                <li><a href="index.html#shop">CARGO PANTS</a></li>
+            </ul>
+        </div>
+
+        <div class="nav-right">
+            <i class="fa-solid fa-magnifying-glass" id="search-btn"></i>
+            <a href="index.html#profile"><i class="fa-solid fa-user"></i></a>
+            <div class="cart-icon" id="cart-btn">
+                <i class="fa-solid fa-bag-shopping"></i>
+                <span class="cart-badge">0</span>
+            </div>
+        </div>
+    </nav>
+
+    <header class="shop-page-header">
+        <div class="container">
+            <p id="shop-subtitle">Premium Collection</p>
+            <h1 id="shop-title">OUR COLLECTION</h1>
+        </div>
+    </header>
+
+    <section class="section-padding">
+        <div class="container">
+            <div class="filter-info">
+                <div class="results-count"><span id="count">0</span> Products Found</div>
+                <div class="active-filters">
+                    <span class="filter-tag" id="price-filter-tag">Price: All</span>
+                </div>
+            </div>
+
+            <div class="product-grid" id="shop-product-grid">
+                <!-- Filtered products will appear here -->
+            </div>
+        </div>
+    </section>
+
+    <footer style="background: #0d0d0d; padding: 80px 0 40px; border-top: 1px solid var(--glass-border);">
+        <div class="container">
+            <div style="text-align: center; font-size: 0.7rem; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 2px;">
+                &copy; 2026 THE STYLE GALLERY. All Rights Reserved.
+            </div>
+        </div>
+    </footer>
+
+    <!-- Cart Sidebar (Need minimal version for shop page) -->
+    <div id="cart-sidebar" class="sidebar">
+        <div class="sidebar-header">
+            <h3>Your Cart</h3>
+            <div class="close-overlay" id="close-cart">&times;</div>
+        </div>
+        <div class="cart-items" id="cart-items-container"></div>
+        <div class="cart-footer">
+            <div class="cart-total">
+                <span>Total:</span>
+                <span id="cart-total-amount">₹0</span>
+            </div>
+            <button class="checkout-btn">Proceed to Checkout</button>
+        </div>
+    </div>
+
+    <div id="toast-container"></div>
+
+    <script src="script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const targetPrice = urlParams.get('price');
+            
+            const products = [
+                { name: "Blue straight fit baggy", price: 799, image: "assets/product/Blue straight fit baggy.jpeg" },
+                { name: "White Wide leg baggy", price: 799, image: "assets/product/White Wide leg baggy.jpeg" },
+                { name: "Double shaded blue wide leg baggy", price: 899, image: "assets/product/Double shaded blue wide leg baggy.jpeg" },
+                { name: "Dark blue double shaded wide leg baggy", price: 899, image: "assets/product/Dark blue double shaded wide leg.jpeg" },
+                { name: "Black double shaded wide leg baggy", price: 899, image: "assets/product/Black double shaded wide leg baggy.jpeg" },
+                { name: "Vintage dark blue wide leg baggy", price: 899, image: "assets/product/Vintage dark blue wide leg baggy.jpeg" }
+            ];
+
+            const grid = document.getElementById('shop-product-grid');
+            const title = document.getElementById('shop-title');
+            const tag = document.getElementById('price-filter-tag');
+            const count = document.getElementById('count');
+
+            let filtered = products;
+            if (targetPrice) {
+                filtered = products.filter(p => p.price == targetPrice);
+                title.innerText = `JEANS AT ₹${targetPrice}`;
+                tag.innerText = `Price: ₹${targetPrice}`;
+            }
+
+            count.innerText = filtered.length;
+
+            grid.innerHTML = filtered.map(p => `
+                <div class="product-card active">
+                    <div class="product-image-container">
+                        <img src="${p.image}" alt="${p.name}">
+                        <div class="add-to-cart-overlay" data-name="${p.name}" data-price="${p.price}" data-image="${p.image}">Add to Cart</div>
+                    </div>
+                    <div class="product-info">
+                        <h3>${p.name}</h3>
+                        <p class="sizes">Sizes: 28 - 34</p>
+                        <div class="price-container">
+                            <span class="current-price">₹${p.price}</span>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+
+            // Re-initialize cart buttons for this page
+            if (window.initCart) {
+                // The global script.js will handle cart clicks if we re-run the listener setup
+                // But we need to make sure the overlays work. 
+                // Since script.js is loaded, it should handle most things.
+            }
+        });
+    </script>
+</body>
+
+</html>

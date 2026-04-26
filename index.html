@@ -4,9 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>THE STYLE GALLERY | Premium Streetwear Brand</title>
+    <title>THE STYLE GALLERY | Premium Men's Bottom Wear Specialist</title>
     <meta name="description"
-        content="Discover premium streetwear at THE STYLE GALLERY. High-quality oversized tees, hoodies, and more.">
+        content="Discover premium men's bottom wear at THE STYLE GALLERY. High-quality baggy jeans, cargo pants, and straight fit denims.">
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
@@ -15,8 +15,8 @@
 
     <div class="promo-bar">
         <div class="promo-content">
-            <span><i class="fa-solid fa-bolt"></i> FREE SHIPPING ON PREPAID ORDERS!</span>
-            <span><i class="fa-solid fa-bolt"></i> NEW ARRIVALS: OVERSIZED COLLECTION OUT NOW</span>
+            <span><i class="fa-solid fa-truck-fast"></i> CASH ON DELIVERY AVAILABLE NATIONWIDE!</span>
+            <span><i class="fa-solid fa-bolt"></i> NEW ARRIVALS: PREMIUM BAGGY JEANS COLLECTION</span>
         </div>
     </div>
 
@@ -35,16 +35,16 @@
         <div class="nav-center">
             <ul class="nav-links">
                 <li><a href="#home">HOME</a></li>
-                <li><a href="#shop">BUY 3 REGULER FIT AT 999</a></li>
-                <li><a href="#shop">BUY 2 OVERSIZE FIT AT 899</a></li>
+                <li><a href="#shop">BAGGY JEANS</a></li>
+                <li><a href="#shop">CARGO PANTS</a></li>
                 <li><a href="#shop">GET ANY BOTTOMS AT JUST ₹899</a></li>
             </ul>
         </div>
 
         <div class="nav-right">
-            <i class="fa-solid fa-magnifying-glass"></i>
-            <i class="fa-solid fa-user"></i>
-            <div class="cart-icon">
+            <i class="fa-solid fa-magnifying-glass" id="search-btn"></i>
+            <i class="fa-solid fa-user" id="profile-btn"></i>
+            <div class="cart-icon" id="cart-btn">
                 <i class="fa-solid fa-bag-shopping"></i>
                 <span class="cart-badge">0</span>
             </div>
@@ -53,17 +53,15 @@
 
     <header class="hero" id="home">
         <div class="hero-slider">
-            <img src="assets/images/hero1.png" alt="Premium Streetwear" class="hero-img active">
-            <img src="https://images.unsplash.com/photo-1552374196-1ab2a1c593e8?q=80&w=1974&auto=format&fit=crop"
-                alt="Urban Fashion" class="hero-img">
-            <img src="https://images.unsplash.com/photo-1591047139829-d91aecb6caea?q=80&w=2072&auto=format&fit=crop"
-                alt="Oversized Streetwear" class="hero-img">
+            <img src="https://images.unsplash.com/photo-1605518216938-7c31b7b14ad0?q=80&w=2070&auto=format&fit=crop" alt="Premium Denim Collection" class="hero-img active">
+            <img src="https://images.unsplash.com/photo-1542272604-787c3835535d?q=80&w=2070&auto=format&fit=crop" alt="Classic Jeans Collection" class="hero-img">
+            <img src="https://images.unsplash.com/photo-1576995853123-5a10305d93c0?q=80&w=2070&auto=format&fit=crop" alt="Stacked Premium Denim Jeans" class="hero-img">
         </div>
         <div class="hero-content">
             <p class="brand-tag">SAGE.LIFE</p>
-            <p class="hero-subtitle">New Arrival</p>
-            <h1>OVERSIZE</h1>
-            <a href="#shop" class="hero-btn">Shop Now</a>
+            <p class="hero-subtitle">Premium Collection</p>
+            <h1>BOTTOMS</h1>
+            <a href="#shop" class="hero-btn">Explore Collection</a>
         </div>
         <div class="slider-dots">
             <span class="dot active"></span>
@@ -76,48 +74,32 @@
         <div class="container">
             <div class="offers-grid">
                 <!-- Offer 1 -->
-                <a href="#shop" class="offer-card reveal">
+                <a href="shop.html?price=799" class="offer-card reveal">
                     <div class="offer-circle">
                         <div class="offer-inner">
-                            <span class="small">BUY ANY</span>
-                            <span class="big">2</span>
-                            <span class="medium">OVERSIZE TSHIRTS</span>
-                            <span class="price-tag">AT JUST 899</span>
+                            <span class="small">PREMIUM</span>
+                            <span class="big" style="font-size: 2.2rem;">JEANS</span>
+                            <span class="medium">AT JUST</span>
+                            <span class="price-tag">₹ 799</span>
                         </div>
                     </div>
                     <div class="offer-info">
-                        <h3>BUY 2 OVERSIZED FIT AT ₹899</h3>
+                        <h3>JEANS AT ₹799</h3>
                     </div>
                 </a>
 
                 <!-- Offer 2 -->
-                <a href="#shop" class="offer-card reveal delay-2">
+                <a href="shop.html?price=899" class="offer-card reveal delay-2">
                     <div class="offer-circle">
                         <div class="offer-inner">
-                            <span class="small">BUY ANY</span>
-                            <span class="big">3</span>
-                            <span class="medium">REGULAR FIT TEE</span>
-                            <span class="price-tag">AT JUST 999</span>
-                        </div>
-                    </div>
-                    <div class="offer-info">
-                        <h3>BUY 3 REGULER FIT TEE AT JUST ₹999</h3>
-                    </div>
-                </a>
-
-                <!-- Offer 3 -->
-                <a href="#shop" class="offer-card reveal delay-3">
-                    <div class="offer-circle">
-                        <div class="offer-inner">
-                            <span class="small">BUY ANY</span>
-                            <span class="big" style="font-size: 2rem;">BOTTOM</span>
+                            <span class="small">PREMIUM</span>
+                            <span class="big" style="font-size: 2.2rem;">JEANS</span>
                             <span class="medium">AT JUST</span>
-                            <span class="price-tag">899</span>
+                            <span class="price-tag">₹ 899</span>
                         </div>
                     </div>
                     <div class="offer-info">
-                        <h3>BOTTOMS AT 899</h3>
-                        <span class="explore-btn">Explore</span>
+                        <h3>JEANS AT ₹899</h3>
                     </div>
                 </a>
             </div>
@@ -125,14 +107,11 @@
 
         <div class="marquee">
             <div class="marquee-content">
-                <span><i class="fa-solid fa-bolt"></i> ANY 3 REGULAR FIT T-SHIRTS IN ₹999</span>
-                <span><i class="fa-solid fa-bolt"></i> ANY 3 REGULAR FIT T-SHIRTS IN ₹999</span>
-                <span><i class="fa-solid fa-bolt"></i> ANY 3 REGULAR FIT T-SHIRTS IN ₹999</span>
-                <span><i class="fa-solid fa-bolt"></i> ANY 3 REGULAR FIT T-SHIRTS IN ₹999</span>
-                <span><i class="fa-solid fa-bolt"></i> ANY 3 REGULAR FIT T-SHIRTS IN ₹999</span>
-                <span><i class="fa-solid fa-bolt"></i> ANY 3 REGULAR FIT T-SHIRTS IN ₹999</span>
-                <span><i class="fa-solid fa-bolt"></i> ANY 3 REGULAR FIT T-SHIRTS IN ₹999</span>
-                <span><i class="fa-solid fa-bolt"></i> ANY 3 REGULAR FIT T-SHIRTS IN ₹999</span>
+                <span><i class="fa-solid fa-fire" style="color: #ff4d00;"></i> EXCLUSIVE OFFER: BUY 3 AT ₹2100 &nbsp;&nbsp;&bull;&nbsp;&nbsp; BUY 2 AT ₹1450 &nbsp;&nbsp;&bull;&nbsp;&nbsp; PREMIUM BOTTOM WEAR AT UNBEATABLE PRICES</span>
+                <span><i class="fa-solid fa-fire" style="color: #ff4d00;"></i> EXCLUSIVE OFFER: BUY 3 AT ₹2100 &nbsp;&nbsp;&bull;&nbsp;&nbsp; BUY 2 AT ₹1450 &nbsp;&nbsp;&bull;&nbsp;&nbsp; PREMIUM BOTTOM WEAR AT UNBEATABLE PRICES</span>
+                <span><i class="fa-solid fa-fire" style="color: #ff4d00;"></i> EXCLUSIVE OFFER: BUY 3 AT ₹2100 &nbsp;&nbsp;&bull;&nbsp;&nbsp; BUY 2 AT ₹1450 &nbsp;&nbsp;&bull;&nbsp;&nbsp; PREMIUM BOTTOM WEAR AT UNBEATABLE PRICES</span>
+                <span><i class="fa-solid fa-fire" style="color: #ff4d00;"></i> EXCLUSIVE OFFER: BUY 3 AT ₹2100 &nbsp;&nbsp;&bull;&nbsp;&nbsp; BUY 2 AT ₹1450 &nbsp;&nbsp;&bull;&nbsp;&nbsp; PREMIUM BOTTOM WEAR AT UNBEATABLE PRICES</span>
+                <span><i class="fa-solid fa-fire" style="color: #ff4d00;"></i> EXCLUSIVE OFFER: BUY 3 AT ₹2100 &nbsp;&nbsp;&bull;&nbsp;&nbsp; BUY 2 AT ₹1450 &nbsp;&nbsp;&bull;&nbsp;&nbsp; PREMIUM BOTTOM WEAR AT UNBEATABLE PRICES</span>
             </div>
         </div>
     </section>
@@ -145,7 +124,7 @@
             </div>
 
             <div class="category-header reveal">
-                <h2>T-SHIRTS</h2>
+                <h2>BOTTOM WEAR</h2>
                 <a href="#shop" class="view-all-btn">View all</a>
             </div>
 
@@ -154,13 +133,14 @@
                 <div class="product-card reveal-scale delay-1">
                     <div class="product-image-container">
                         <img src="assets/product/Blue straight fit baggy.jpeg" alt="Blue straight fit baggy">
-                        <div class="add-to-cart-overlay">Add to Cart</div>
+                        <div class="add-to-cart-overlay" data-name="Blue straight fit baggy" data-price="799"
+                            data-image="assets/product/Blue straight fit baggy.jpeg">Add to Cart</div>
                     </div>
                     <div class="product-info">
                         <h3>Blue straight fit baggy</h3>
-                        <p class="sizes">Sizes: 28-34</p>
+                        <p class="sizes">Sizes: 28 - 34</p>
                         <div class="price-container">
-                            <span class="current-price">₹700</span>
+                            <span class="current-price">₹799</span>
                         </div>
                     </div>
                 </div>
@@ -169,7 +149,8 @@
                 <div class="product-card reveal-scale delay-2">
                     <div class="product-image-container">
                         <img src="assets/product/White Wide leg baggy.jpeg" alt="White Wide leg baggy">
-                        <div class="add-to-cart-overlay">Add to Cart</div>
+                        <div class="add-to-cart-overlay" data-name="White Wide leg baggy" data-price="799"
+                            data-image="assets/product/White Wide leg baggy.jpeg">Add to Cart</div>
                     </div>
                     <div class="product-info">
                         <h3>White Wide leg baggy</h3>
@@ -185,7 +166,8 @@
                     <div class="product-image-container">
                         <img src="assets/product/Double shaded blue wide leg baggy.jpeg"
                             alt="Double shaded blue wide leg baggy">
-                        <div class="add-to-cart-overlay">Add to Cart</div>
+                        <div class="add-to-cart-overlay" data-name="Double shaded blue wide leg baggy" data-price="899"
+                            data-image="assets/product/Double shaded blue wide leg baggy.jpeg">Add to Cart</div>
                     </div>
                     <div class="product-info">
                         <h3>Double shaded blue wide leg baggy</h3>
@@ -201,7 +183,9 @@
                     <div class="product-image-container">
                         <img src="assets/product/Dark blue double shaded wide leg.jpeg"
                             alt="Dark blue double shaded wide leg baggy">
-                        <div class="add-to-cart-overlay">Add to Cart</div>
+                        <div class="add-to-cart-overlay" data-name="Dark blue double shaded wide leg baggy"
+                            data-price="899" data-image="assets/product/Dark blue double shaded wide leg.jpeg">Add to
+                            Cart</div>
                     </div>
                     <div class="product-info">
                         <h3>Dark blue double shaded wide leg baggy</h3>
@@ -217,7 +201,8 @@
                     <div class="product-image-container">
                         <img src="assets/product/Black double shaded wide leg baggy.jpeg"
                             alt="Black double shaded wide leg baggy">
-                        <div class="add-to-cart-overlay">Add to Cart</div>
+                        <div class="add-to-cart-overlay" data-name="Black double shaded wide leg baggy" data-price="899"
+                            data-image="assets/product/Black double shaded wide leg baggy.jpeg">Add to Cart</div>
                     </div>
                     <div class="product-info">
                         <h3>Black double shaded wide leg baggy</h3>
@@ -233,7 +218,8 @@
                     <div class="product-image-container">
                         <img src="assets/product/Vintage dark blue wide leg baggy.jpeg"
                             alt="Vintage dark blue wide leg baggy">
-                        <div class="add-to-cart-overlay">Add to Cart</div>
+                        <div class="add-to-cart-overlay" data-name="Vintage dark blue wide leg baggy" data-price="899"
+                            data-image="assets/product/Vintage dark blue wide leg baggy.jpeg">Add to Cart</div>
                     </div>
                     <div class="product-info">
                         <h3>Vintage dark blue wide leg baggy</h3>
@@ -254,7 +240,8 @@
                 <div>
                     <h3 style="margin-bottom: 20px; font-size: 1.2rem;">THE STYLE GALLERY</h3>
                     <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 20px;">The Style Gallery
-                        is a men's clothing store offering the latest trending collections at prices far lower than the
+                        is a men's exclusive bottom wear store offering the latest trending collections of Baggy Jeans,
+                        Cargoes, and Denims at prices far lower than the
                         market, with premium quality guaranteed. 🔥💯</p>
                     <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 15px;"><i
                             class="fa-solid fa-location-dot" style="margin-right: 10px;"></i> FMG2+GFM, Police Lines,
@@ -312,6 +299,381 @@
     <a href="https://wa.me/918000150047" class="whatsapp-float" target="_blank">
         <i class="fa-brands fa-whatsapp"></i>
     </a>
+
+    <!-- Search Overlay -->
+    <div id="search-overlay" class="overlay">
+        <div class="overlay-content">
+            <div class="close-overlay" id="close-search">&times;</div>
+            <div class="search-container">
+                <input type="text" id="search-input" placeholder="Search for products..." autocomplete="off">
+                <div class="search-results" id="search-results"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cart Sidebar -->
+    <div id="cart-sidebar" class="sidebar">
+        <div class="sidebar-header">
+            <h3>Your Cart</h3>
+            <div class="close-overlay" id="close-cart">&times;</div>
+        </div>
+        <div class="cart-items" id="cart-items-container">
+            <!-- Items will be injected here -->
+            <div class="empty-cart-message">Your cart is empty</div>
+        </div>
+        <div class="cart-footer">
+            <div class="cart-total">
+                <span>Total:</span>
+                <span id="cart-total-amount">₹0</span>
+            </div>
+            <button class="checkout-btn">Proceed to Checkout</button>
+        </div>
+    </div>
+
+    <!-- Profile Modal -->
+    <div id="profile-modal" class="modal">
+        <div class="modal-content">
+            <div class="close-overlay" id="close-profile">&times;</div>
+            <div class="profile-header">
+                <div class="profile-avatar">
+                    <i class="fa-solid fa-user"></i>
+                </div>
+                <h2>Guest User</h2>
+            </div>
+            <div class="profile-menu">
+                <a href="#" id="view-orders-btn"><i class="fa-solid fa-box"></i> My Orders</a>
+                <a href="#" id="view-wishlist-btn"><i class="fa-solid fa-heart"></i> Wishlist</a>
+                <a href="#" id="view-addresses-btn"><i class="fa-solid fa-location-dot"></i> Saved Addresses</a>
+                <a href="#" id="view-settings-btn"><i class="fa-solid fa-gear"></i> Settings</a>
+                <button class="logout-btn" id="auth-trigger-btn">Log In / Sign Up</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Checkout Overlay -->
+    <div id="checkout-overlay" class="overlay">
+        <div class="checkout-container">
+            <div class="close-overlay" id="close-checkout">&times;</div>
+
+            <div class="checkout-steps">
+                <div class="step active" data-step="1"><span>1</span> Shipping</div>
+                <div class="step" data-step="2"><span>2</span> Payment</div>
+                <div class="step" data-step="3"><span>3</span> Success</div>
+            </div>
+
+            <!-- Step 1: Shipping -->
+            <div class="checkout-step-content active" id="step-1">
+                <form id="shipping-form">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Full Name</label>
+                            <input type="text" placeholder="Gaurav Goyal" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Email Address</label>
+                            <input type="email" placeholder="example@gmail.com" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Phone Number</label>
+                            <input type="tel" placeholder="+91 XXXXX XXXXX" required>
+                        </div>
+                        <div class="form-group">
+                            <label>PIN Code</label>
+                            <input type="text" placeholder="305001" required>
+                        </div>
+                        <div class="form-group full">
+                            <label>Full Address</label>
+                            <textarea placeholder="House No, Street, Landmark" required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>City</label>
+                            <input type="text" placeholder="Ajmer" required>
+                        </div>
+                        <div class="form-group">
+                            <label>State</label>
+                            <input type="text" placeholder="Rajasthan" required>
+                        </div>
+                    </div>
+                    <button type="submit" class="next-step-btn">Continue to Payment</button>
+                </form>
+            </div>
+
+            <!-- Step 2: Payment -->
+            <div class="checkout-step-content" id="step-2">
+                <div class="payment-methods">
+                    <div class="payment-option selected" style="width: 100%; justify-content: center;">
+                        <i class="fa-solid fa-truck-fast"></i>
+                        <span>Cash on Delivery</span>
+                        <span class="cod-extra">Free Delivery</span>
+                    </div>
+                </div>
+                <div class="order-summary-box">
+                    <div class="summary-row">
+                        <span>Subtotal</span>
+                        <span id="summary-subtotal">₹0</span>
+                    </div>
+                    <div class="summary-row">
+                        <span>Shipping</span>
+                        <span id="summary-shipping">FREE</span>
+                    </div>
+                    <div class="summary-row total">
+                        <span>Total Amount</span>
+                        <span id="summary-total">₹0</span>
+                    </div>
+                </div>
+                <button id="place-order-btn" class="next-step-btn">Place Order</button>
+            </div>
+
+            <!-- Step 3: Success -->
+            <div class="checkout-step-content" id="step-3">
+                <div class="success-message">
+                    <div class="success-icon">
+                        <i class="fa-solid fa-check"></i>
+                    </div>
+                    <h2>Order Placed Successfully!</h2>
+                    <p>Thank you for shopping with THE STYLE GALLERY. Your order <strong
+                            id="order-id">#TSG-8821</strong> has been confirmed.</p>
+                    <p class="sub">You will receive a confirmation email shortly.</p>
+                    <button class="next-step-btn" id="continue-shopping">Continue Shopping</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Auth Overlay -->
+    <div id="auth-overlay" class="overlay">
+        <div class="auth-container">
+            <div class="close-overlay" id="close-auth">&times;</div>
+
+            <div class="auth-tabs">
+                <div class="auth-tab active" data-tab="login">Login</div>
+                <div class="auth-tab" data-tab="signup">Sign Up</div>
+            </div>
+
+            <!-- Login Form -->
+            <div class="auth-form-content active" id="login-form-container">
+                <h2>Welcome Back</h2>
+                <p>Login to your account for a better experience</p>
+                <form id="login-form">
+                    <div class="form-group">
+                        <label>Phone Number</label>
+                        <input type="tel" id="login-phone" placeholder="9876543210" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Password</label>
+                        <input type="password" id="login-password" placeholder="••••••••" required>
+                    </div>
+                    <button type="submit" class="auth-btn">Log In</button>
+                    <p class="auth-footer">Don't have an account? <span class="switch-tab" data-tab="signup">Sign
+                            Up</span></p>
+                </form>
+            </div>
+
+            <!-- Signup Form -->
+            <div class="auth-form-content" id="signup-form-container">
+                <h2>Create Account</h2>
+                <p>Join THE STYLE GALLERY family</p>
+                <form id="signup-form">
+                    <div class="form-group">
+                        <label>Full Name</label>
+                        <input type="text" placeholder="Gaurav Goyal" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Phone Number</label>
+                        <input type="tel" placeholder="Enter 10 digit number" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Password</label>
+                        <input type="password" placeholder="Create a password" required>
+                    </div>
+                    <button type="submit" class="auth-btn">Sign Up</button>
+                    <p class="auth-footer">Already have an account? <span class="switch-tab" data-tab="login">Log
+                            In</span></p>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Orders Overlay -->
+    <div id="orders-overlay" class="overlay">
+        <div class="profile-details-container">
+            <div class="close-overlay" id="close-orders">&times;</div>
+            <div class="profile-details-header">
+                <h2>My Orders</h2>
+            </div>
+            <div class="profile-details-content" id="orders-list">
+                <!-- Orders will be injected here -->
+                <div class="empty-state">
+                    <i class="fa-solid fa-box-open"></i>
+                    <p>No orders yet</p>
+                    <a href="#shop" class="explore-btn">Start Shopping</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Wishlist Overlay -->
+    <div id="wishlist-overlay" class="overlay">
+        <div class="profile-details-container">
+            <div class="close-overlay" id="close-wishlist">&times;</div>
+            <div class="profile-details-header">
+                <h2>My Wishlist</h2>
+            </div>
+            <div class="profile-details-content" id="wishlist-items">
+                <!-- Wishlist items will be injected here -->
+                <div class="empty-state">
+                    <i class="fa-solid fa-heart"></i>
+                    <p>Your wishlist is empty</p>
+                    <a href="#shop" class="explore-btn">Explore Bottoms</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Addresses Overlay -->
+    <div id="addresses-overlay" class="overlay">
+        <div class="profile-details-container">
+            <div class="close-overlay" id="close-addresses">&times;</div>
+            <div class="profile-details-header">
+                <h2>Saved Addresses</h2>
+            </div>
+            <div class="profile-details-content">
+                <div class="address-card">
+                    <div class="address-badge">Default</div>
+                    <h3>Gaurav Goyal</h3>
+                    <p>FMG2+GFM, Police Lines, Ajmer, Rajasthan 305001</p>
+                    <p>Phone: +91 80001 50047</p>
+                    <div class="address-actions">
+                        <button><i class="fa-solid fa-pen"></i> Edit</button>
+                        <button><i class="fa-solid fa-trash"></i> Remove</button>
+                    </div>
+                </div>
+                <button class="add-new-address"><i class="fa-solid fa-plus"></i> Add New Address</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Settings Overlay -->
+    <div id="settings-overlay" class="overlay">
+        <div class="profile-details-container">
+            <div class="close-overlay" id="close-settings">&times;</div>
+            <div class="profile-details-header">
+                <h2>Account Settings</h2>
+            </div>
+            <div class="profile-details-content">
+                <div class="settings-group">
+                    <h3>Personal Information</h3>
+                    <div class="form-group">
+                        <label>Full Name</label>
+                        <input type="text" value="Guest User" id="settings-name">
+                    </div>
+                    <div class="form-group">
+                        <label>Phone Number</label>
+                        <input type="tel" value="+91 9876543210" disabled>
+                    </div>
+                    <button class="save-settings-btn">Save Changes</button>
+                </div>
+                <div class="settings-group">
+                    <h3>Privacy & Security</h3>
+                    <button class="outline-btn">Change Password</button>
+                    <button class="outline-btn danger">Delete Account</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Product Quick View Overlay -->
+    <div id="quickview-overlay" class="overlay">
+        <div class="quickview-container">
+            <div class="close-overlay" id="close-quickview">&times;</div>
+            <div class="quickview-content">
+                <div class="quickview-left">
+                    <div class="main-image-container">
+                        <img id="qv-main-img" src="" alt="">
+                    </div>
+                    <div class="thumbnail-gallery">
+                        <div class="thumb active"><img id="qv-thumb-1" src="" alt=""></div>
+                        <div class="thumb"><img id="qv-thumb-2" src="" alt=""></div>
+                    </div>
+                </div>
+                <div class="quickview-right">
+                    <div class="qv-header">
+                        <h2 id="qv-title">PRODUCT TITLE</h2>
+                        <div class="qv-status-fire">
+                            <i class="fa-solid fa-fire"></i> <span id="qv-sold-count">10 sold in last 15 hours</span>
+                        </div>
+                    </div>
+
+                    <div class="qv-price-box">
+                        <span class="old-price" id="qv-old-price">₹1299</span>
+                        <span class="new-price" id="qv-new-price">₹799</span>
+                    </div>
+
+                    <div class="qv-stock-status">
+                        <p id="qv-stock-msg">Please hurry! Only 4 left in stock</p>
+                        <div class="stock-progress-bar">
+                            <div class="stock-progress" style="width: 30%;"></div>
+                        </div>
+                    </div>
+
+                    <div class="qv-variants">
+                        <p class="variant-label">Size: <span id="selected-size-val">28</span></p>
+                        <div class="size-options">
+                            <div class="size-btn active">28</div>
+                            <div class="size-btn">30</div>
+                            <div class="size-btn">32</div>
+                            <div class="size-btn">34</div>
+                        </div>
+                    </div>
+
+                    <div class="qv-actions">
+                        <div class="qty-selector">
+                            <button id="qv-qty-minus">-</button>
+                            <input type="number" id="qv-qty-input" value="1" min="1">
+                            <button id="qv-qty-plus">+</button>
+                        </div>
+                        <button id="qv-add-to-cart" class="qv-main-btn">Add to Cart</button>
+                        <div id="qv-wishlist-btn" class="qv-secondary-btn"><i class="fa-regular fa-heart"></i></div>
+                    </div>
+
+                    <button id="qv-buy-now" class="qv-buy-btn">Buy It Now</button>
+
+                    <div class="qv-specifications">
+                        <h3>Specification</h3>
+                        <div class="spec-grid">
+                            <div class="spec-item">
+                                <span class="label">Fabric</span>
+                                <span class="value">100% Cotton</span>
+                            </div>
+                            <div class="spec-item">
+                                <span class="label">Fit</span>
+                                <span class="value">Baggy / Wide Leg</span>
+                            </div>
+                            <div class="spec-item">
+                                <span class="label">Pattern</span>
+                                <span class="value">Solid / Premium</span>
+                            </div>
+                            <div class="spec-item">
+                                <span class="label">Style</span>
+                                <span class="value">Streetwear</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="qv-shipping-info">
+                        <i class="fa-solid fa-truck-fast"></i>
+                        <div class="ship-text">
+                            <strong>Free Shipping</strong>
+                            <span>Estimated delivery time is 4 to 7 Days.</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast-container"></div>
 
     <script src="script.js"></script>
 </body>

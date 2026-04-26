@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel | THE STYLE GALLERY</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+
+    <!-- Login Screen -->
+    <div id="login-screen">
+        <div class="login-box">
+            <div class="login-logo">
+                <i class="fa-solid fa-shield-halved"></i>
+            </div>
+            <h1>Admin Panel</h1>
+            <p>THE STYLE GALLERY</p>
+            <form id="login-form">
+                <div class="login-field">
+                    <i class="fa-solid fa-lock"></i>
+                    <input type="password" id="admin-pin" placeholder="Enter Admin PIN" maxlength="6" autofocus>
+                </div>
+                <button type="submit" class="login-btn">Access Dashboard</button>
+                <p class="login-hint">Default PIN: 1234</p>
+            </form>
+        </div>
+    </div>
+
+    <!-- Admin Panel -->
+    <div id="admin-panel" style="display:none;">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <h2><i class="fa-solid fa-crown"></i> TSG Admin</h2>
+                <div class="sidebar-close" id="sidebar-close"><i class="fa-solid fa-xmark"></i></div>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="#" class="nav-item active" data-page="dashboard"><i class="fa-solid fa-gauge-high"></i> Dashboard</a>
+                <a href="#" class="nav-item" data-page="hero"><i class="fa-solid fa-images"></i> Hero Section</a>
+                <a href="#" class="nav-item" data-page="offers"><i class="fa-solid fa-tags"></i> Offers & Strip</a>
+                <a href="#" class="nav-item" data-page="products"><i class="fa-solid fa-box-open"></i> Products</a>
+                <a href="#" class="nav-item" data-page="orders"><i class="fa-solid fa-clipboard-list"></i> Orders</a>
+                <a href="#" class="nav-item" data-page="analytics"><i class="fa-solid fa-chart-line"></i> Analytics</a>
+                <a href="#" class="nav-item" data-page="settings"><i class="fa-solid fa-gear"></i> Settings</a>
+            </nav>
+            <div class="sidebar-footer">
+                <a href="index.html" target="_blank"><i class="fa-solid fa-external-link"></i> View Website</a>
+                <a href="#" id="logout-btn"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="topbar">
+                <div class="topbar-left">
+                    <button class="menu-btn" id="menu-btn"><i class="fa-solid fa-bars"></i></button>
+                    <h2 id="page-title">Dashboard</h2>
+                </div>
+                <div class="topbar-right">
+                    <span class="live-badge"><i class="fa-solid fa-circle"></i> Live</span>
+                    <span class="admin-name"><i class="fa-solid fa-user-shield"></i> Admin</span>
+                </div>
+            </header>
+
+            <!-- Dashboard Page -->
+            <section class="page active" id="page-dashboard">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: linear-gradient(135deg, #667eea, #764ba2);"><i class="fa-solid fa-box-open"></i></div>
+                        <div class="stat-info">
+                            <span class="stat-label">Total Products</span>
+                            <span class="stat-value" id="stat-products">0</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: linear-gradient(135deg, #f093fb, #f5576c);"><i class="fa-solid fa-shopping-bag"></i></div>
+                        <div class="stat-info">
+                            <span class="stat-label">Total Orders</span>
+                            <span class="stat-value" id="stat-orders">0</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: linear-gradient(135deg, #4facfe, #00f2fe);"><i class="fa-solid fa-indian-rupee-sign"></i></div>
+                        <div class="stat-info">
+                            <span class="stat-label">Revenue</span>
+                            <span class="stat-value" id="stat-revenue">₹0</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: linear-gradient(135deg, #fa709a, #fee140);"><i class="fa-solid fa-triangle-exclamation"></i></div>
+                        <div class="stat-info">
+                            <span class="stat-label">Low Stock</span>
+                            <span class="stat-value" id="stat-lowstock">0</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="dashboard-grid">
+                    <div class="card">
+                        <div class="card-header"><h3>Recent Orders</h3></div>
+                        <div class="card-body" id="recent-orders-list">
+                            <p class="empty-msg">No orders yet</p>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header"><h3>Quick Actions</h3></div>
+                        <div class="card-body">
+                            <button class="quick-action-btn" data-goto="hero"><i class="fa-solid fa-images"></i> Update Hero</button>
+                            <button class="quick-action-btn" data-goto="offers"><i class="fa-solid fa-tags"></i> Edit Offers</button>
+                            <button class="quick-action-btn" data-goto="products"><i class="fa-solid fa-plus"></i> Add Product</button>
+                            <button class="quick-action-btn" onclick="window.open('index.html','_blank')"><i class="fa-solid fa-eye"></i> View Store</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Hero Section Page -->
+            <section class="page" id="page-hero">
+                <div class="page-header">
+                    <h3>Manage Hero Slider</h3>
+                    <button class="save-btn" id="save-hero"><i class="fa-solid fa-floppy-disk"></i> Save & Publish</button>
+                </div>
+                <div class="hero-manager-grid" id="hero-slides-container">
+                    <!-- JS will render slides -->
+                </div>
+            </section>
+
+            <!-- Offers Page -->
+            <section class="page" id="page-offers">
+                <div class="page-header">
+                    <h3>Manage Offers & Running Strip</h3>
+                    <button class="save-btn" id="save-offers"><i class="fa-solid fa-floppy-disk"></i> Save & Publish</button>
+                </div>
+                <div class="card">
+                    <div class="card-header"><h3><i class="fa-solid fa-circle-dot"></i> Offer Circles</h3></div>
+                    <div class="card-body">
+                        <div class="offers-editor-grid" id="offer-circles-container"></div>
+                    </div>
+                </div>
+                <div class="card" style="margin-top:20px;">
+                    <div class="card-header"><h3><i class="fa-solid fa-scroll"></i> Running Strip / Marquee</h3></div>
+                    <div class="card-body">
+                        <div class="form-group">
+                            <label>Marquee Text</label>
+                            <textarea id="marquee-text" rows="3" placeholder="Enter running strip text..."></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="card" style="margin-top:20px;">
+                    <div class="card-header"><h3><i class="fa-solid fa-gift"></i> Combo Offers</h3></div>
+                    <div class="card-body" id="combo-offers-container"></div>
+                    <button class="add-combo-btn" id="add-combo"><i class="fa-solid fa-plus"></i> Add Combo Offer</button>
+                </div>
+            </section>
+
+            <!-- Products Page -->
+            <section class="page" id="page-products">
+                <div class="page-header">
+                    <h3>Manage Products & Stock</h3>
+                    <button class="save-btn" id="add-product-btn"><i class="fa-solid fa-plus"></i> Add Product</button>
+                </div>
+                <div class="products-table-container">
+                    <table class="products-table">
+                        <thead>
+                            <tr>
+                                <th>Image</th>
+                                <th>Name</th>
+                                <th>Price</th>
+                                <th>Sizes</th>
+                                <th>Stock</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="products-tbody"></tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Orders Page -->
+            <section class="page" id="page-orders">
+                <div class="page-header">
+                    <h3>Orders Management</h3>
+                    <div class="order-filters">
+                        <button class="filter-btn active" data-filter="all">All</button>
+                        <button class="filter-btn" data-filter="confirmed">Confirmed</button>
+                        <button class="filter-btn" data-filter="shipped">Shipped</button>
+                        <button class="filter-btn" data-filter="delivered">Delivered</button>
+                    </div>
+                </div>
+                <div class="orders-list" id="orders-list-full">
+                    <p class="empty-msg">No orders yet</p>
+                </div>
+            </section>
+
+            <!-- Analytics Page -->
+            <section class="page" id="page-analytics">
+                <div class="page-header"><h3>Analytics Overview</h3></div>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background:linear-gradient(135deg,#43e97b,#38f9d7);"><i class="fa-solid fa-eye"></i></div>
+                        <div class="stat-info"><span class="stat-label">Page Views</span><span class="stat-value" id="stat-views">0</span></div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background:linear-gradient(135deg,#fa709a,#fee140);"><i class="fa-solid fa-cart-shopping"></i></div>
+                        <div class="stat-info"><span class="stat-label">Cart Adds</span><span class="stat-value" id="stat-cartadds">0</span></div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background:linear-gradient(135deg,#a18cd1,#fbc2eb);"><i class="fa-solid fa-percent"></i></div>
+                        <div class="stat-info"><span class="stat-label">Conversion Rate</span><span class="stat-value" id="stat-conversion">0%</span></div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background:linear-gradient(135deg,#ffecd2,#fcb69f);"><i class="fa-solid fa-star"></i></div>
+                        <div class="stat-info"><span class="stat-label">Top Product</span><span class="stat-value" id="stat-top" style="font-size:0.85rem;">-</span></div>
+                    </div>
+                </div>
+                <div class="card" style="margin-top:20px;">
+                    <div class="card-header"><h3>Revenue (Last 7 Days)</h3></div>
+                    <div class="card-body">
+                        <div class="chart-container" id="revenue-chart"></div>
+                    </div>
+                </div>
+                <div class="card" style="margin-top:20px;">
+                    <div class="card-header"><h3>Product Performance</h3></div>
+                    <div class="card-body" id="product-performance"></div>
+                </div>
+            </section>
+
+            <!-- Settings Page -->
+            <section class="page" id="page-settings">
+                <div class="page-header"><h3>Settings</h3><button class="save-btn" id="save-settings"><i class="fa-solid fa-floppy-disk"></i> Save Settings</button></div>
+                <div class="card">
+                    <div class="card-header"><h3><i class="fa-solid fa-key"></i> Change Admin PIN</h3></div>
+                    <div class="card-body">
+                        <div class="form-group"><label>Current PIN</label><input type="password" id="current-pin" placeholder="Current PIN"></div>
+                        <div class="form-group"><label>New PIN</label><input type="password" id="new-pin" placeholder="New PIN"></div>
+                        <button class="save-btn" id="change-pin-btn" style="margin-top:10px;">Change PIN</button>
+                    </div>
+                </div>
+                <div class="card" style="margin-top:20px;">
+                    <div class="card-header"><h3><i class="fa-solid fa-store"></i> Store Info</h3></div>
+                    <div class="card-body">
+                        <div class="form-group"><label>Store Name</label><input type="text" id="store-name" value="THE STYLE GALLERY"></div>
+                        <div class="form-group"><label>WhatsApp Number</label><input type="text" id="store-whatsapp" value="918000150047"></div>
+                        <div class="form-group"><label>Instagram Handle</label><input type="text" id="store-instagram" value="@_the_stylegallery"></div>
+                    </div>
+                </div>
+                <div class="card" style="margin-top:20px;">
+                    <div class="card-header"><h3><i class="fa-solid fa-database"></i> Data Management</h3></div>
+                    <div class="card-body">
+                        <button class="quick-action-btn" id="export-data"><i class="fa-solid fa-download"></i> Export All Data</button>
+                        <button class="quick-action-btn" id="import-data"><i class="fa-solid fa-upload"></i> Import Data</button>
+                        <button class="quick-action-btn danger" id="reset-data"><i class="fa-solid fa-trash"></i> Reset All Data</button>
+                        <input type="file" id="import-file" accept=".json" style="display:none;">
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Product Modal -->
+    <div class="modal-overlay" id="product-modal" style="display:none;">
+        <div class="modal-box">
+            <div class="modal-header">
+                <h3 id="modal-title">Add Product</h3>
+                <button class="modal-close" id="close-product-modal"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <form id="product-form">
+                <div class="form-group"><label>Product Name</label><input type="text" id="p-name" required placeholder="Blue straight fit baggy"></div>
+                <div class="form-row">
+                    <div class="form-group"><label>Price (₹)</label><input type="number" id="p-price" required placeholder="799"></div>
+                    <div class="form-group"><label>Stock</label><input type="number" id="p-stock" required placeholder="20"></div>
+                </div>
+                <div class="form-group"><label>Image Path/URL</label><input type="text" id="p-image" required placeholder="assets/product/image.jpeg or https://..."></div>
+                <div class="form-group"><label>Sizes (comma separated)</label><input type="text" id="p-sizes" value="28, 30, 32, 34" placeholder="28, 30, 32, 34"></div>
+                <div class="form-group"><label>Category</label>
+                    <select id="p-category">
+                        <option value="baggy">Baggy Jeans</option>
+                        <option value="cargo">Cargo Pants</option>
+                        <option value="straight">Straight Fit</option>
+                        <option value="wide-leg">Wide Leg</option>
+                    </select>
+                </div>
+                <input type="hidden" id="p-edit-id" value="">
+                <div class="modal-footer">
+                    <button type="button" class="cancel-btn" id="cancel-product">Cancel</button>
+                    <button type="submit" class="save-btn">Save Product</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Toast -->
+    <div id="admin-toast"></div>
+
+    <script src="admin.js"></script>
+</body>
+</html>

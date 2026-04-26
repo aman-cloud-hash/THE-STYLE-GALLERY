@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | THE STYLE GALLERY</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            background-color: #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            background-image: 
+                linear-gradient(rgba(255, 77, 0, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 77, 0, 0.03) 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
+
+        .auth-page-container {
+            width: 100%;
+            max-width: 450px;
+            padding: 20px;
+        }
+
+        .auth-card {
+            background: #111;
+            padding: 50px;
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .auth-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, #ff4d00, #ff8c00);
+        }
+
+        .logo-container {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .logo-container img {
+            height: 60px;
+        }
+
+        .auth-header {
+            text-align: center;
+            margin-bottom: 35px;
+        }
+
+        .auth-header h1 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            color: #fff;
+            letter-spacing: -1px;
+        }
+
+        .auth-header p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 10px;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-secondary);
+            font-weight: 700;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 15px;
+            background: #1a1a1a;
+            border: 1px solid var(--glass-border);
+            color: #fff;
+            border-radius: 6px;
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+
+        .form-group input:focus {
+            border-color: #ff4d00;
+            outline: none;
+            background: #222;
+        }
+
+        .auth-submit-btn {
+            width: 100%;
+            padding: 16px;
+            background: #fff;
+            color: #000;
+            border: none;
+            border-radius: 6px;
+            font-weight: 900;
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            cursor: pointer;
+            transition: var(--transition);
+            margin-top: 10px;
+        }
+
+        .auth-submit-btn:hover {
+            background: #ff4d00;
+            color: #fff;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(255, 77, 0, 0.3);
+        }
+
+        .auth-footer-links {
+            text-align: center;
+            margin-top: 30px;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .auth-footer-links a {
+            color: #fff;
+            font-weight: 700;
+            text-decoration: none;
+            margin-left: 5px;
+        }
+
+        .auth-footer-links a:hover {
+            color: #ff4d00;
+        }
+
+        .back-home {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: var(--transition);
+        }
+
+        .back-home:hover {
+            color: #fff;
+        }
+        
+        #error-msg {
+            color: #ff4d00;
+            font-size: 0.85rem;
+            text-align: center;
+            margin-top: 15px;
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+
+    <a href="index.html" class="back-home">
+        <i class="fa-solid fa-arrow-left"></i> Back to Store
+    </a>
+
+    <div class="auth-page-container">
+        <div class="auth-card">
+            <div class="logo-container">
+                <img src="assets/images/logo.png" alt="THE STYLE GALLERY">
+            </div>
+
+            <div class="auth-header">
+                <h1>Welcome Back</h1>
+                <p>Login to your premium fashion account</p>
+            </div>
+
+            <form id="login-form-page">
+                <div class="form-group">
+                    <label for="phone">Phone Number</label>
+                    <input type="tel" id="phone" placeholder="9876543210" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" placeholder="••••••••" required>
+                </div>
+
+                <button type="submit" class="auth-submit-btn">Log In</button>
+                <div id="error-msg">Invalid credentials. Please try again.</div>
+            </form>
+
+            <div class="auth-footer-links">
+                Don't have an account? <a href="signup.html">Sign Up</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('login-form-page').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const phone = document.getElementById('phone').value;
+            const pass = document.getElementById('password').value;
+            const errorMsg = document.getElementById('error-msg');
+
+            // Hardcoded credentials for now as requested
+            if (phone === '9876543210' && pass === 'test@123') {
+                const userData = { name: 'Gaurav Goyal', phone: phone };
+                localStorage.setItem('user', JSON.stringify(userData));
+                
+                // Show success and redirect
+                const btn = e.target.querySelector('button');
+                btn.innerText = 'Logging in...';
+                btn.style.background = '#25d366';
+                btn.style.color = '#fff';
+                
+                setTimeout(() => {
+                    window.location.href = 'index.html';
+                }, 1000);
+            } else {
+                errorMsg.style.display = 'block';
+                errorMsg.innerText = 'Invalid credentials. Try 9876543210 / test@123';
+                
+                // Shake effect
+                const card = document.querySelector('.auth-card');
+                card.style.animation = 'shake 0.5s ease';
+                setTimeout(() => card.style.animation = '', 500);
+            }
+        });
+
+        // Add shake animation
+        const style = document.createElement('style');
+        style.innerHTML = `
+            @keyframes shake {
+                0%, 100% { transform: translateX(0); }
+                25% { transform: translateX(-10px); }
+                75% { transform: translateX(10px); }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+
+</html>
