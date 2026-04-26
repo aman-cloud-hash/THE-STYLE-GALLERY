@@ -407,7 +407,13 @@ function loadOrdersList() {
     });
 
     if (filteredOrders.length === 0) {
-        container.innerHTML = '<p class="empty-msg">No orders match your filters.</p>';
+        container.innerHTML = `
+            <div class="empty-state">
+                <i class="fa-solid fa-filter-circle-xmark"></i>
+                <p>No orders match your filters.</p>
+                <button class="action-btn" onclick="clearAllFilters()">Clear All Filters</button>
+            </div>
+        `;
         return;
     }
 
@@ -522,13 +528,23 @@ window.bulkDeleteOrders = function() {
 // Order Filter Listeners
 function initOrderFilters() {
     const search = document.getElementById('order-search');
+    const clearSearch = document.getElementById('clear-search');
     const dateFrom = document.getElementById('filter-date-from');
     const dateTo = document.getElementById('filter-date-to');
     const clearDates = document.getElementById('clear-date-filters');
 
-    const triggerUpdate = () => loadOrdersList();
+    const triggerUpdate = () => {
+        clearSearch.style.display = search.value ? 'block' : 'none';
+        loadOrdersList();
+    };
 
     search.addEventListener('input', triggerUpdate);
+    
+    clearSearch.addEventListener('click', () => {
+        search.value = '';
+        triggerUpdate();
+    });
+
     dateFrom.addEventListener('change', triggerUpdate);
     dateTo.addEventListener('change', triggerUpdate);
     
@@ -545,6 +561,13 @@ function initOrderFilters() {
             triggerUpdate();
         });
     });
+
+    window.clearAllFilters = () => {
+        search.value = '';
+        dateFrom.value = '';
+        dateTo.value = '';
+        document.querySelector('.filter-btn[data-filter="all"]').click();
+    };
 }
 
 
